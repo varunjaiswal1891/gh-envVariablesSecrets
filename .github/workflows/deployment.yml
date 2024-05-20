@@ -9,8 +9,8 @@ jobs:
   test-job:
     env:
         MONGODB_CLUSTER_ADDRESS: clustervjtest.sskufcj.mongodb.net  #job level env variable
-        MONGODB_USERNAME: varunjaiswal91       
-        MONGODB_PASSWORD: NFTpUoY68xqPy5H3    
+        MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}      
+        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}   
         PORT: 8080     
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +35,6 @@ jobs:
     steps: 
       - name: Output deploy info
         run: | 
-           echo "Mongo DB Username = ${{ env.MONGODB_USERNAME }}" #accessing job level env variable - will give error
            echo "Mongo DB name = ${{ env.MONGODB_DB_NAME }}"  #accessing workflow level env variable 
       - name: Print default env variables
         run: | 
