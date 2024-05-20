@@ -7,6 +7,7 @@ env:
   MONGODB_DB_NAME: gha-demo      #workflow level env variable
 jobs:
   test-job:
+    environment: testing
     env:
         MONGODB_CLUSTER_ADDRESS: clustervjtest.sskufcj.mongodb.net  #job level env variable
         MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}      
