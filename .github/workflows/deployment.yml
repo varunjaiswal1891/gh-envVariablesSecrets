@@ -1,0 +1,39 @@
+name: Deployment workflow
+on:
+  push:
+    branches:
+      - master
+env:
+  MONGODB_DB_NAME: gha-demo      #workflow level env variable
+jobs:
+  test-job:
+    env:
+        MONGODB_CLUSTER_ADDRESS: clustervjtest.sskufcj.mongodb.net  #job level env variable
+        MONGODB_USERNAME: varunjaiswal91       
+        MONGODB_PASSWORD: NFTpUoY68xqPy5H3    
+        PORT: 8080     
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run Server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT
+      - name: Run tests
+        run: npm test
+      - name: Output Info
+        run: echo "Mongo DB Username = ${{ env.MONGODB_USERNAME }}"
+  deploy-job:
+    needs: test-job
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Output deploy info
+        run: | 
+           echo "Mongo DB Username = ${{ env.MONGODB_USERNAME }}" #accessing job level env variable - will give error
+           echo "Mongo DB name = ${{ env.MONGODB_DB_NAME }}"  #accessing workflow level env variable 
